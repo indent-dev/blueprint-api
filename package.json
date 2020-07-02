@@ -1,0 +1,41 @@
+{
+  "name": "blueprint-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --build",
+    "dev": "tsnd --respawn ./src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/indent-dev/blueprint-api.git"
+  },
+  "keywords": [],
+  "author": {
+    "name": "indent-dev",
+    "url": "https://github.com/indent-dev/"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/indent-dev/blueprint-api/issues"
+  },
+  "homepage": "https://github.com/indent-dev/blueprint-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.6",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.6",
+    "@types/jsonwebtoken": "^8.5.0",
+    "ts-node-dev": "^1.0.0-pre.50",
+    "typescript": "^3.9.6"
+  }
+}
