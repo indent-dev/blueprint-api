@@ -1,0 +1,6 @@
+{
+    "name": "Blueprint-API",
+    "description": "Platform to navigate people in public place",
+    "repository": "https://github.com/indent-dev/blueprint-api",
+    "stack": "container"
+}
