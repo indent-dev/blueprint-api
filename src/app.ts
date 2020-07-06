@@ -4,15 +4,15 @@ import errorHandler from './middlewares/errorHandler'
 
 const app = express()
 
+app.use(cors())
+app.use(express.json())
+
 app.get('/', (req: Request, res: Response) => {
   res.json({
     isSucces: true,
     message: 'Hello, World!',
   })
 })
-
-app.use(cors())
-app.use(express.json())
 
 app.use(errorHandler)
 
