@@ -7,7 +7,10 @@ const projectSchema = new Schema(
   {
     name: String,
     description: String,
-    isDeleted: Boolean,
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
