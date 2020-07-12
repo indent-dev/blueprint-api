@@ -5,4 +5,8 @@ export default class ProjectService {
   createProject(project: ProjectRequest) {
     return projectModel.create({ ...project });
   }
+
+  getAllProject() {
+    return projectModel.find({});;
+  }
 }

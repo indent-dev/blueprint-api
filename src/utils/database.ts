@@ -41,7 +41,7 @@ export async function closeDB(isUsingMemory?: boolean) {
 }
 
 export async function mockingDatabaseRecord() {
-  const project = await projectModel.create({
+  await projectModel.create({
     name: "peta kandang singa 1",
     description: "kandang singa ini berada disebelah kandang harimau 1",
   });

@@ -5,6 +5,7 @@ const projectRouter = Router();
 const projectController = new ProjectController();
 const baseUrl = "/project";
 
-projectRouter.post(baseUrl, projectController.store);
+projectRouter.post(`${baseUrl}`, projectController.store);
+projectRouter.get(`${baseUrl}`, projectController.show);
 
 export default projectRouter;
