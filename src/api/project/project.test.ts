@@ -52,6 +52,7 @@ describe("project", () => {
     expect(createProjectResponse.status).equal(500);
     expect(createProjectResponse.body).to.deep.include({
       isSuccess: "false",
+      statusCode: 500,
       message: "Project validation failed: description: Path `description` is required."
     });
   });
