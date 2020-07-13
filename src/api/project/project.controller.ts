@@ -13,7 +13,7 @@ export default class ProjectController {
     }
   }
 
-  async show(req: Request, res: Response, next: NextFunction) {
+  async index(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await projectService.getAllProject();
       res.send(result);

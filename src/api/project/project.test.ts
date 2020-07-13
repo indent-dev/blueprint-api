@@ -50,7 +50,9 @@ describe("project", () => {
       .post("/project")
       .send({ name: "sample-project" });
     expect(createProjectResponse.status).equal(500);
-    expect(createProjectResponse.body).to.has.property("isSuccess")
-      .equal("false");
+    expect(createProjectResponse.body).to.deep.include({
+      isSuccess: "false",
+      message: "Project validation failed: description: Path `description` is required."
+    });
   });
 });

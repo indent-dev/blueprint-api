@@ -6,6 +6,6 @@ const projectController = new ProjectController();
 const baseUrl = "/project";
 
 projectRouter.post(`${baseUrl}`, projectController.store);
-projectRouter.get(`${baseUrl}`, projectController.show);
+projectRouter.get(`${baseUrl}`, projectController.index);
 
 export default projectRouter;
