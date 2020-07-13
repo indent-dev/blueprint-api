@@ -12,4 +12,13 @@ export default class ProjectController {
       next(new HttpException(error.statusCode || 500, error.message));
     }
   }
+
+  async index(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await projectService.getAllProject();
+      res.send(result);
+    } catch (error) {
+      next(new HttpException(error.statusCode || 500, error.message));
+    }
+  }
 }

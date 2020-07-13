@@ -5,8 +5,14 @@ export type ProjectDocument = Project & Document;
 
 const projectSchema = new Schema(
   {
-    name: String,
-    description: String,
+    name: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
     isDeleted: {
       type: Boolean,
       default: false,
