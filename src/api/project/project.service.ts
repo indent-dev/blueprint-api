@@ -7,7 +7,7 @@ export default class ProjectService {
   }
 
   getAllProject() {
-    return projectModel.find();;
+    return projectModel.find({ "isDeleted": false });;
   }
 
   deleteProject(id: string) {

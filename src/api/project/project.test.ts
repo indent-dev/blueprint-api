@@ -60,6 +60,7 @@ describe("project", () => {
   it("can delete project", async () => {
     const getAllProjectResponse = await request
       .get("/project");
+    expect(getAllProjectResponse.body[0]).to.has.property("_id");
     const projectId = getAllProjectResponse.body[0]._id;
 
     const deleteProjectResponse = await request
@@ -72,9 +73,7 @@ describe("project", () => {
 
     const getAllProjectVerifyResponse = await request
       .get("/project");
-    expect(getAllProjectVerifyResponse.body[0]).to.deep.include({
-      _id: `${projectId}`,
-      isDeleted: true,
-    })
+    expect(getAllProjectVerifyResponse.body[0]).to.has.property("_id")
+      .but.not.equal(`${projectId}`);
   });
 });
