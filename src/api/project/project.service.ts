@@ -1,6 +1,5 @@
 import { ProjectRequest } from "./project.type";
 import projectModel from "./project.model";
-import { json } from "express";
 
 export default class ProjectService {
   createProject(project: ProjectRequest) {
