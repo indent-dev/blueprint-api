@@ -7,6 +7,10 @@ export default class ProjectService {
   }
 
   getAllProject() {
-    return projectModel.find();;
+    return projectModel.find({ "isDeleted": false });;
+  }
+
+  deleteProject(id: string) {
+    return projectModel.findByIdAndUpdate(id, { "isDeleted": true }, { new: true, lean: true });
   }
 }
