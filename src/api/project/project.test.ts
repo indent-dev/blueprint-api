@@ -56,4 +56,25 @@ describe("project", () => {
       message: "Project validation failed: description: Path `description` is required."
     });
   });
+
+  it("can delete project", async () => {
+    const getAllProjectResponse = await request
+      .get("/project");
+    const projectId = getAllProjectResponse.body[0]._id;
+
+    const deleteProjectResponse = await request
+      .delete(`/project/${projectId}`)
+    expect(deleteProjectResponse.body).to.deep.include({
+      _id: `${projectId}`,
+      isDeleted: true,
+      message: "Data successfully deleted"
+    })
+
+    const getAllProjectVerifyResponse = await request
+      .get("/project");
+    expect(getAllProjectVerifyResponse.body[0]).to.deep.include({
+      _id: `${projectId}`,
+      isDeleted: true,
+    })
+  });
 });

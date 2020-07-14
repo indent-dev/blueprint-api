@@ -21,4 +21,14 @@ export default class ProjectController {
       next(new HttpException(error.statusCode || 500, error.message));
     }
   }
+
+  async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await projectService.deleteProject(req.params.id);
+      const message = { message: "Data successfully deleted" };
+      res.send({ ...result, ...message });
+    } catch (error) {
+      next(new HttpException(error.statusCode || 500, error.message));
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import { ProjectRequest } from "./project.type";
 import projectModel from "./project.model";
+import { json } from "express";
 
 export default class ProjectService {
   createProject(project: ProjectRequest) {
@@ -8,5 +9,9 @@ export default class ProjectService {
 
   getAllProject() {
     return projectModel.find();;
+  }
+
+  deleteProject(id: string) {
+    return projectModel.findByIdAndUpdate(id, { "isDeleted": true }, { new: true, lean: true });
   }
 }
