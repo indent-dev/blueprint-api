@@ -1,21 +1,24 @@
-import express, { Request, Response } from "express";
-import cors from "cors";
-import errorHandler from "./middlewares/errorHandler";
-import projectRouter from "./api/project/project.router";
+import express, { Request, Response } from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
+import errorHandler from './middlewares/errorHandler'
+import projectRouter from './api/project/project.router'
 
-const app = express();
+const app = express()
 
-app.use(cors());
-app.use(express.json());
+app.use(helmet())
 
-app.get("/", (req: Request, res: Response) => {
+app.use(cors())
+app.use(express.json())
+
+app.get('/', (req: Request, res: Response) => {
   res.json({
     isSucces: true,
-    message: "Hello, World!",
-  });
-});
+    message: 'Hello, World!',
+  })
+})
 
-app.use(projectRouter);
-app.use(errorHandler);
+app.use(projectRouter)
+app.use(errorHandler)
 
-export default app;
+export default app
