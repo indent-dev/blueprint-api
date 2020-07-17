@@ -12,8 +12,6 @@ import {
 
 const request = supertest(app)
 
-// mulai bari 51 di code-send nya mas aka
-
 describe('project', () => {
   beforeAll(async () => await connectDB(true))
 
@@ -56,6 +54,21 @@ describe('project', () => {
     })
   })
 
+  it('can edit project', async () => {
+    const geAllProjectResponse = await request.get('/project').send()
+    const projectId = geAllProjectResponse.body[0]._id
+
+    const editProjectResponse = await request
+      .put(`/project/${projectId}`)
+      .send({ name: 'bangau', description: 'kandang bangau' })
+
+    expect(editProjectResponse.body).to.has.property('_id')
+    expect(editProjectResponse.body).to.deep.include({
+      name: 'bangau',
+      description: 'kandang bangau',
+    })
+  })
+
   it('can delete project', async () => {
     const getAllProjectResponse = await request.get('/project')
     expect(getAllProjectResponse.body[0]).to.has.property('_id')
@@ -75,12 +88,10 @@ describe('project', () => {
   })
 
   it('can sanitize HTML character into escaped character', async () => {
-    const createProjectResponse = await request
-      .post('/project')
-      .send({
-        name: '<h1>sample-project</h1>',
-        description: '<script>sample-desctiption</script>',
-      })
+    const createProjectResponse = await request.post('/project').send({
+      name: '<h1>sample-project</h1>',
+      description: '<script>sample-desctiption</script>',
+    })
 
     expect(createProjectResponse.body).to.has.property('_id')
     expect(createProjectResponse.body).to.deep.include({
