@@ -12,8 +12,6 @@ import {
 
 const request = supertest(app)
 
-// mulai bari 51 di code-send nya mas aka
-
 describe('project', () => {
   beforeAll(async () => await connectDB(true))
 
@@ -53,6 +51,21 @@ describe('project', () => {
       statusCode: 500,
       message:
         'Project validation failed: description: Path `description` is required.',
+    })
+  })
+
+  it('can edit project', async () => {
+    const geAllProjectResponse = await request.get('/project').send()
+    const projectId = geAllProjectResponse.body[0]._id
+
+    const editProjectResponse = await request
+      .put(`/project/${projectId}`)
+      .send({ name: 'bangau', description: 'kandang bangau' })
+
+    expect(editProjectResponse.body).to.has.property('_id')
+    expect(editProjectResponse.body).to.deep.include({
+      name: 'bangau',
+      description: 'kandang bangau',
     })
   })
 

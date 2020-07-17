@@ -1,6 +1,6 @@
 import { ProjectRequest } from './project.type'
+import projectModel, { ProjectDocument } from './project.model'
 import HttpException from '../../utils/httpException'
-import projectModel from './project.model'
 
 export default class ProjectService {
   /* Harusnya ini nanti
@@ -27,6 +27,24 @@ export default class ProjectService {
 
   getAllProject() {
     return projectModel.find({ isDeleted: false })
+  }
+
+  editProject(id: string, project: ProjectRequest) {
+    return new Promise<ProjectDocument>(async (resolve, reject) => {
+      try {
+        const editedProject = await projectModel.findByIdAndUpdate(
+          id,
+          project,
+          {
+            new: true,
+          }
+        )
+        if (editedProject) resolve(editedProject)
+        else throw new HttpException(400, 'project not found')
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
   deleteProject(id: string) {
