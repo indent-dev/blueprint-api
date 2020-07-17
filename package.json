@@ -37,6 +37,8 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-validator": "^6.6.0",
+    "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
     "mongodb-memory-server": "^6.6.1",
     "mongoose": "^5.9.21"
@@ -58,6 +60,7 @@
     "@types/cors": "^2.8.6",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.6",
+    "@types/helmet": "0.0.47",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/mongoose": "^5.7.29",
     "jest": "^26.1.0",
