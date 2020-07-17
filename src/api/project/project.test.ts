@@ -75,17 +75,28 @@ describe('project', () => {
   })
 
   it('can sanitize HTML character into escaped character', async () => {
-    const createProjectResponse = await request
-      .post('/project')
-      .send({
-        name: '<h1>sample-project</h1>',
-        description: '<script>sample-desctiption</script>',
-      })
+    const createProjectResponse = await request.post('/project').send({
+      name: '<h1>sample-project</h1>',
+      description: '<script>sample-desctiption</script>',
+    })
 
     expect(createProjectResponse.body).to.has.property('_id')
     expect(createProjectResponse.body).to.deep.include({
       name: '&lt;h1&gt;sample-project&lt;&#x2F;h1&gt;',
       description: '&lt;script&gt;sample-desctiption&lt;&#x2F;script&gt;',
+    })
+  })
+
+  it('can check duplicate project name', async () => {
+    const createProjectResponse = await request.post('/project').send({
+      name: 'peta kandang singa 2',
+      description: 'kandang singa ini berada disebelah kandang harimau 2',
+    })
+
+    expect(createProjectResponse.body).to.deep.equal({
+      isSuccess: 'false',
+      statusCode: 409,
+      message: 'Project name already exist',
     })
   })
 })
