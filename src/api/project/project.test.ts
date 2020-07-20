@@ -99,4 +99,17 @@ describe('project', () => {
       description: '&lt;script&gt;sample-desctiption&lt;&#x2F;script&gt;',
     })
   })
+
+  it('can check duplicate project name', async () => {
+    const createProjectResponse = await request.post('/project').send({
+      name: 'peta kandang singa 2',
+      description: 'kandang singa ini berada disebelah kandang harimau 2',
+    })
+
+    expect(createProjectResponse.body).to.deep.equal({
+      isSuccess: 'false',
+      statusCode: 409,
+      message: 'Project name already exist',
+    })
+  })
 })

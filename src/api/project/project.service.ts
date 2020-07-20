@@ -3,8 +3,26 @@ import projectModel, { ProjectDocument } from './project.model'
 import HttpException from '../../utils/httpException'
 
 export default class ProjectService {
+  /* Harusnya ini nanti
+   *  cek nama project
+   *  per user yang login ya
+   */
+  getProjectByName(name: string) {
+    return projectModel.findOne({ name })
+  }
+
   createProject(project: ProjectRequest) {
-    return projectModel.create({ ...project })
+    return new Promise(async (resolve, reject) => {
+      try {
+        const isProjectExist = await this.getProjectByName(project.name)
+        if (isProjectExist)
+          throw new HttpException(409, 'Project name already exist')
+
+        resolve(projectModel.create({ ...project }))
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
   getAllProject() {
