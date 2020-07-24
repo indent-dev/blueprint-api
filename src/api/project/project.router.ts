@@ -11,7 +11,10 @@ projectRouter.post(
   [body('name').escape(), body('description').escape()],
   projectController.store
 )
-projectRouter.get(`${baseUrl}`, projectController.index)
+projectRouter.get(
+  `${baseUrl}/:page/:itemPerPage/:sortBy/:sortDirection/:name?`,
+  projectController.index
+)
 projectRouter.put(`${baseUrl}/:id`, projectController.edit)
 projectRouter.delete(`${baseUrl}/:id`, projectController.delete)
 

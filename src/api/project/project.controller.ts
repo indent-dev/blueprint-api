@@ -15,7 +15,7 @@ export default class ProjectController {
 
   async index(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await projectService.getAllProject()
+      const result = await projectService.getAllProject(req.params)
       res.send(result)
     } catch (error) {
       next(new HttpException(error.statusCode || 500, error.message))

@@ -1,6 +1,7 @@
 import { ProjectRequest } from './project.type'
 import projectModel, { ProjectDocument } from './project.model'
 import HttpException from '../../utils/httpException'
+import { ParamsDictionary } from 'express-serve-static-core'
 
 export default class ProjectService {
   /* Harusnya ini nanti
@@ -25,8 +26,17 @@ export default class ProjectService {
     })
   }
 
-  getAllProject() {
-    return projectModel.find({ isDeleted: false })
+  getAllProject(params: ParamsDictionary) {
+    const { page, itemPerPage, sortBy, sortDirection, name = '' } = params
+    const query = { isDeleted: false, name: { $regex: name, $options: 'i' } }
+    return projectModel
+      .find(query, null, {
+        limit: Number(itemPerPage),
+        skip: (Number(page) - 1) * Number(itemPerPage),
+        sort: { [sortBy]: sortDirection },
+        lean: true,
+      })
+      .exec()
   }
 
   editProject(id: string, project: ProjectRequest) {
@@ -48,10 +58,8 @@ export default class ProjectService {
   }
 
   deleteProject(id: string) {
-    return projectModel.findByIdAndUpdate(
-      id,
-      { isDeleted: true },
-      { new: true, lean: true }
-    )
+    return projectModel
+      .findByIdAndUpdate(id, { isDeleted: true }, { new: true, lean: true })
+      .exec()
   }
 }
