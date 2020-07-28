@@ -1,20 +1,18 @@
 import { Router } from 'express'
-import { body } from 'express-validator'
 import ProjectController from './project.controller'
+import ProjectSanitizer from './project.sanitizer'
 
 const projectRouter = Router()
 const projectController = new ProjectController()
+const projectSanitizer = new ProjectSanitizer()
 const baseUrl = '/project'
 
 projectRouter.post(
   `${baseUrl}`,
-  [body('name').escape(), body('description').escape()],
+  projectSanitizer.sanitizeProjectBody(),
   projectController.store
 )
-projectRouter.get(
-  `${baseUrl}/:page/:itemPerPage/:sortBy/:sortDirection/:name?`,
-  projectController.index
-)
+projectRouter.get(`${baseUrl}`, projectController.index)
 projectRouter.put(`${baseUrl}/:id`, projectController.edit)
 projectRouter.delete(`${baseUrl}/:id`, projectController.delete)
 

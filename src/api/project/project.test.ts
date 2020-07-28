@@ -23,13 +23,15 @@ describe('project', () => {
   afterAll(async () => await closeDB(true))
 
   it('can get all project and limited project per page', async () => {
-    const getAllProjectResponse = await request.get('/project/1/1/name/asc')
+    const getAllProjectResponse = await request.get(
+      '/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc'
+    )
     expect(getAllProjectResponse.body).to.have.length(1)
   })
 
   it('can search project by name', async () => {
     const getAllProjectResponse = await request.get(
-      '/project/1/1/name/asc/safari'
+      '/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc&name=safari'
     )
     expect(getAllProjectResponse.body).to.have.length(1)
     expect(getAllProjectResponse.body[0]).to.deep.include({
@@ -39,7 +41,9 @@ describe('project', () => {
   })
 
   it('can sort project by name A-Z', async () => {
-    const getAllProjectResponse = await request.get('/project/1/1/name/asc/')
+    const getAllProjectResponse = await request.get(
+      '/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc'
+    )
     expect(getAllProjectResponse.body).to.have.length(1)
     expect(getAllProjectResponse.body[0]).to.deep.include({
       name: 'taman safari sector 6',
@@ -49,7 +53,7 @@ describe('project', () => {
 
   it('can sort project by createdAt oldest', async () => {
     const getAllProjectResponse = await request.get(
-      '/project/1/1/createdAt/desc/'
+      '/project/?page=1&itemPerPage=1&sortBy=createdAt&sortDirection=desc'
     )
     expect(getAllProjectResponse.body).to.have.length(1)
     expect(getAllProjectResponse.body[0]).to.deep.include({
@@ -60,7 +64,7 @@ describe('project', () => {
 
   it('can sort project by createdAt newest', async () => {
     const getAllProjectResponse = await request.get(
-      '/project/1/1/createdAt/asc/'
+      '/project/?page=1&itemPerPage=1&sortBy=createdAt&sortDirection=asc'
     )
     expect(getAllProjectResponse.body).to.have.length(1)
     expect(getAllProjectResponse.body[0]).to.deep.include({
@@ -79,7 +83,9 @@ describe('project', () => {
       description: 'sample-description',
     })
 
-    const getAllProjectResponse = await request.get('/project/1/3/name/asc')
+    const getAllProjectResponse = await request.get(
+      '/project/?page=1&itemPerPage=3&sortBy=name&sortDirection=asc'
+    )
     expect(getAllProjectResponse.body).to.have.length(3)
   })
 
@@ -98,7 +104,7 @@ describe('project', () => {
 
   it('can edit project', async () => {
     const geAllProjectResponse = await request
-      .get('/project/1/1/createdAt/desc')
+      .get('/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc')
       .send()
     const projectId = geAllProjectResponse.body[0]._id
 
@@ -114,7 +120,9 @@ describe('project', () => {
   })
 
   it('can delete project', async () => {
-    const getAllProjectResponse = await request.get('/project/1/2/name/asc')
+    const getAllProjectResponse = await request.get(
+      '/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc'
+    )
     expect(getAllProjectResponse.body[0]).to.has.property('_id')
     const projectId = getAllProjectResponse.body[0]._id
 
@@ -122,11 +130,10 @@ describe('project', () => {
     expect(deleteProjectResponse.body).to.deep.include({
       _id: `${projectId}`,
       isDeleted: true,
-      message: 'Data successfully deleted',
     })
 
     const getAllProjectVerifyResponse = await request.get(
-      '/project/1/2/name/asc'
+      '/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc'
     )
     expect(getAllProjectVerifyResponse.body[0])
       .to.has.property('_id')
