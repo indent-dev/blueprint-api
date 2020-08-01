@@ -12,8 +12,20 @@ projectRouter.post(
   projectSanitizer.sanitizeProjectBody(),
   projectController.store
 )
-projectRouter.get(`${baseUrl}`, projectController.index)
-projectRouter.put(`${baseUrl}/:id`, projectController.edit)
-projectRouter.delete(`${baseUrl}/:id`, projectController.delete)
+projectRouter.get(
+  `${baseUrl}`,
+  projectSanitizer.getProjectIndexQuery(),
+  projectController.index
+)
+projectRouter.put(
+  `${baseUrl}/:id?`,
+  projectSanitizer.putProjectParamBody(),
+  projectController.edit
+)
+projectRouter.delete(
+  `${baseUrl}/:id?`,
+  projectSanitizer.deleteProjectParam(),
+  projectController.delete
+)
 
 export default projectRouter

@@ -93,12 +93,17 @@ describe('project', () => {
     const createProjectResponse = await request
       .post('/project')
       .send({ name: 'sample-project' })
-    expect(createProjectResponse.status).equal(500)
+    expect(createProjectResponse.status).equal(400)
     expect(createProjectResponse.body).to.deep.include({
       isSuccess: 'false',
-      statusCode: 500,
-      message:
-        'Project validation failed: description: Path `description` is required.',
+      statusCode: 400,
+      message: {
+        description: {
+          msg: 'must be given',
+          param: 'description',
+          location: 'body',
+        },
+      },
     })
   })
 
