@@ -1,14 +1,16 @@
 import { body, query, param } from 'express-validator'
 import { Types } from 'mongoose'
+import validationHandler from '../../middlewares/validationHandler'
 
 export default class ProjectSanitizer {
-  sanitizeProjectBody() {
+  sanitizeCreateProject() {
     return [
       body(['name', 'description'], 'must be given').notEmpty().bail().escape(),
+      validationHandler,
     ]
   }
 
-  getProjectIndexQuery() {
+  validateGetAllProject() {
     return [
       query(['page', 'itemPerPage'], 'must be given')
         .notEmpty()
@@ -21,10 +23,11 @@ export default class ProjectSanitizer {
         .bail()
         .isIn(['asc', 'desc'])
         .withMessage('must ascending (asc) or descending (desc)'),
+      validationHandler,
     ]
   }
 
-  putProjectParamBody() {
+  validateEditProject() {
     return [
       param('id', 'must be given')
         .notEmpty()
@@ -37,10 +40,11 @@ export default class ProjectSanitizer {
           }
         }),
       body(['name', 'description'], 'must be given').notEmpty(),
+      validationHandler,
     ]
   }
 
-  deleteProjectParam() {
+  validateDeleteProject() {
     return [
       param('id', 'must be given')
         .notEmpty()
@@ -52,6 +56,7 @@ export default class ProjectSanitizer {
             throw new Error('id is not valid')
           }
         }),
+      validationHandler,
     ]
   }
 }

@@ -9,22 +9,22 @@ const baseUrl = '/project'
 
 projectRouter.post(
   `${baseUrl}`,
-  projectSanitizer.sanitizeProjectBody(),
+  projectSanitizer.sanitizeCreateProject(),
   projectController.store
 )
 projectRouter.get(
   `${baseUrl}`,
-  projectSanitizer.getProjectIndexQuery(),
+  projectSanitizer.validateGetAllProject(),
   projectController.index
 )
 projectRouter.put(
   `${baseUrl}/:id?`,
-  projectSanitizer.putProjectParamBody(),
+  projectSanitizer.validateEditProject(),
   projectController.edit
 )
 projectRouter.delete(
   `${baseUrl}/:id?`,
-  projectSanitizer.deleteProjectParam(),
+  projectSanitizer.validateDeleteProject(),
   projectController.delete
 )
 
