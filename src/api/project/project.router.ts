@@ -1,18 +1,31 @@
 import { Router } from 'express'
-import { body } from 'express-validator'
 import ProjectController from './project.controller'
+import ProjectSanitizer from './project.sanitizer'
 
 const projectRouter = Router()
 const projectController = new ProjectController()
+const projectSanitizer = new ProjectSanitizer()
 const baseUrl = '/project'
 
 projectRouter.post(
   `${baseUrl}`,
-  [body('name').escape(), body('description').escape()],
+  projectSanitizer.sanitizeCreateProject(),
   projectController.store
 )
-projectRouter.get(`${baseUrl}`, projectController.index)
-projectRouter.put(`${baseUrl}/:id`, projectController.edit)
-projectRouter.delete(`${baseUrl}/:id`, projectController.delete)
+projectRouter.get(
+  `${baseUrl}`,
+  projectSanitizer.validateGetAllProject(),
+  projectController.index
+)
+projectRouter.put(
+  `${baseUrl}/:id?`,
+  projectSanitizer.validateEditProject(),
+  projectController.edit
+)
+projectRouter.delete(
+  `${baseUrl}/:id?`,
+  projectSanitizer.validateDeleteProject(),
+  projectController.delete
+)
 
 export default projectRouter

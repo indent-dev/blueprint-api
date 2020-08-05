@@ -15,7 +15,14 @@ export default class ProjectController {
 
   async index(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await projectService.getAllProject()
+      const { page, itemPerPage, sortBy, sortDirection, name = '' } = req.query
+      const result = await projectService.getAllProject(
+        Number(page),
+        Number(itemPerPage),
+        sortBy as string,
+        sortDirection as string,
+        name as string
+      )
       res.send(result)
     } catch (error) {
       next(new HttpException(error.statusCode || 500, error.message))
@@ -35,8 +42,7 @@ export default class ProjectController {
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await projectService.deleteProject(req.params.id)
-      const message = { message: 'Data successfully deleted' }
-      res.send({ ...result, ...message })
+      res.send(result)
     } catch (error) {
       next(new HttpException(error.statusCode || 500, error.message))
     }
