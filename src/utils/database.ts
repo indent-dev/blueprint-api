@@ -4,7 +4,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import projectModel from '../api/project/project.model'
 
 const mongoMemoryServer = new MongoMemoryServer()
-const { DB_USER, DB_PASS, DB_NAME } = process.env
+const { CONNECTION_STRING } = process.env
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -14,13 +14,21 @@ const options = {
 async function getConnectionString(isUsingMemory?: boolean) {
   return isUsingMemory
     ? await mongoMemoryServer.getConnectionString()
-    : `mongodb+srv://${DB_USER}:${DB_PASS}@clusterblueprint.yvkef.gcp.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`
+    : `${CONNECTION_STRING}`
 }
 
 export async function connectDB(isUsingMemory?: boolean) {
   const connectionString = await getConnectionString(isUsingMemory)
   return mongoose.connect(connectionString, options)
 }
+
+mongoose.connection.on('error', function (error) {
+  console.error('Database connection error:', error)
+})
+
+mongoose.connection.once('open', function () {
+  console.log('Database connected:', getConnectionString(false))
+})
 
 export async function clearDB() {
   return await mongoose.connection.db.dropDatabase()
