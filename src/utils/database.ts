@@ -34,11 +34,11 @@ export async function closeDB(isUsingMemory?: boolean) {
 
 export async function mockingDatabaseRecord() {
   await projectModel.create({
-    name: 'peta kandang singa 1',
+    name: 'werehouse peta kandang singa 1',
     description: 'kandang singa ini berada disebelah kandang harimau 1',
   })
   await projectModel.create({
-    name: 'peta kandang singa 2',
+    name: 'taman safari sector 6',
     description: 'kandang singa ini berada disebelah kandang harimau 2',
   })
 }

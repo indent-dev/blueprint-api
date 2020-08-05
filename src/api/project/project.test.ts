@@ -22,9 +22,55 @@ describe('project', () => {
 
   afterAll(async () => await closeDB(true))
 
-  it('can get all project', async () => {
-    const getAllProjectResponse = await request.get('/project')
-    expect(getAllProjectResponse.body).to.have.length(2)
+  it('can get all project and limited project per page', async () => {
+    const getAllProjectResponse = await request.get(
+      '/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc'
+    )
+    expect(getAllProjectResponse.body).to.have.length(1)
+  })
+
+  it('can search project by name', async () => {
+    const getAllProjectResponse = await request.get(
+      '/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc&name=safari'
+    )
+    expect(getAllProjectResponse.body).to.have.length(1)
+    expect(getAllProjectResponse.body[0]).to.deep.include({
+      name: 'taman safari sector 6',
+      description: 'kandang singa ini berada disebelah kandang harimau 2',
+    })
+  })
+
+  it('can sort project by name A-Z', async () => {
+    const getAllProjectResponse = await request.get(
+      '/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc'
+    )
+    expect(getAllProjectResponse.body).to.have.length(1)
+    expect(getAllProjectResponse.body[0]).to.deep.include({
+      name: 'taman safari sector 6',
+      description: 'kandang singa ini berada disebelah kandang harimau 2',
+    })
+  })
+
+  it('can sort project by createdAt oldest', async () => {
+    const getAllProjectResponse = await request.get(
+      '/project/?page=1&itemPerPage=1&sortBy=createdAt&sortDirection=desc'
+    )
+    expect(getAllProjectResponse.body).to.have.length(1)
+    expect(getAllProjectResponse.body[0]).to.deep.include({
+      name: 'taman safari sector 6',
+      description: 'kandang singa ini berada disebelah kandang harimau 2',
+    })
+  })
+
+  it('can sort project by createdAt newest', async () => {
+    const getAllProjectResponse = await request.get(
+      '/project/?page=1&itemPerPage=1&sortBy=createdAt&sortDirection=asc'
+    )
+    expect(getAllProjectResponse.body).to.have.length(1)
+    expect(getAllProjectResponse.body[0]).to.deep.include({
+      name: 'werehouse peta kandang singa 1',
+      description: 'kandang singa ini berada disebelah kandang harimau 1',
+    })
   })
 
   it('can create project', async () => {
@@ -37,7 +83,9 @@ describe('project', () => {
       description: 'sample-description',
     })
 
-    const getAllProjectResponse = await request.get('/project')
+    const getAllProjectResponse = await request.get(
+      '/project/?page=1&itemPerPage=3&sortBy=name&sortDirection=asc'
+    )
     expect(getAllProjectResponse.body).to.have.length(3)
   })
 
@@ -45,17 +93,24 @@ describe('project', () => {
     const createProjectResponse = await request
       .post('/project')
       .send({ name: 'sample-project' })
-    expect(createProjectResponse.status).equal(500)
+    expect(createProjectResponse.status).equal(400)
     expect(createProjectResponse.body).to.deep.include({
       isSuccess: 'false',
-      statusCode: 500,
-      message:
-        'Project validation failed: description: Path `description` is required.',
+      statusCode: 400,
+      message: {
+        description: {
+          msg: 'must be given',
+          param: 'description',
+          location: 'body',
+        },
+      },
     })
   })
 
   it('can edit project', async () => {
-    const geAllProjectResponse = await request.get('/project').send()
+    const geAllProjectResponse = await request
+      .get('/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc')
+      .send()
     const projectId = geAllProjectResponse.body[0]._id
 
     const editProjectResponse = await request
@@ -70,7 +125,9 @@ describe('project', () => {
   })
 
   it('can delete project', async () => {
-    const getAllProjectResponse = await request.get('/project')
+    const getAllProjectResponse = await request.get(
+      '/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc'
+    )
     expect(getAllProjectResponse.body[0]).to.has.property('_id')
     const projectId = getAllProjectResponse.body[0]._id
 
@@ -78,10 +135,11 @@ describe('project', () => {
     expect(deleteProjectResponse.body).to.deep.include({
       _id: `${projectId}`,
       isDeleted: true,
-      message: 'Data successfully deleted',
     })
 
-    const getAllProjectVerifyResponse = await request.get('/project')
+    const getAllProjectVerifyResponse = await request.get(
+      '/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc'
+    )
     expect(getAllProjectVerifyResponse.body[0])
       .to.has.property('_id')
       .but.not.equal(`${projectId}`)
@@ -102,8 +160,8 @@ describe('project', () => {
 
   it('can check duplicate project name', async () => {
     const createProjectResponse = await request.post('/project').send({
-      name: 'peta kandang singa 2',
-      description: 'kandang singa ini berada disebelah kandang harimau 2',
+      name: 'werehouse peta kandang singa 1',
+      description: 'kandang singa ini berada disebelah kandang harimau 1',
     })
 
     expect(createProjectResponse.body).to.deep.equal({

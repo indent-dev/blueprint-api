@@ -25,8 +25,30 @@ export default class ProjectService {
     })
   }
 
-  getAllProject() {
-    return projectModel.find({ isDeleted: false })
+  getAllProject(
+    page: number,
+    itemPerPage: number,
+    sortBy: string,
+    sortDirection: string,
+    name: string
+  ) {
+    return new Promise<ProjectDocument[]>(async (resolve, reject) => {
+      try {
+        const query = {
+          isDeleted: false,
+          name: { $regex: name, $options: 'i' },
+        }
+        const getProject = await projectModel
+          .find(query)
+          .limit(itemPerPage)
+          .skip((page - 1) * itemPerPage)
+          .sort({ [sortBy]: sortDirection })
+        if (getProject) resolve(getProject)
+        else throw new HttpException(409, 'project not found')
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
   editProject(id: string, project: ProjectRequest) {
@@ -48,10 +70,20 @@ export default class ProjectService {
   }
 
   deleteProject(id: string) {
-    return projectModel.findByIdAndUpdate(
-      id,
-      { isDeleted: true },
-      { new: true, lean: true }
+    return new Promise<Pick<ProjectDocument, '_id' | 'name' | 'description'>>(
+      async (resolve, reject) => {
+        try {
+          const deletedProject = await projectModel.findByIdAndUpdate(
+            id,
+            { isDeleted: true },
+            { new: true, lean: true }
+          )
+          if (deletedProject) resolve(deletedProject)
+          else throw new HttpException(400, 'project not found')
+        } catch (error) {
+          reject(error)
+        }
+      }
     )
   }
 }
