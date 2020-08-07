@@ -8,7 +8,7 @@ export default class ProjectService {
    *  per user yang login ya
    */
   getProjectByName(name: string) {
-    return projectModel.findOne({ name })
+    return projectModel.findOne({ name, isDeleted: false })
   }
 
   createProject(project: ProjectRequest) {
