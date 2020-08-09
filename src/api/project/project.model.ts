@@ -1,7 +1,7 @@
 import { Project } from './project.type'
 import { Document, Schema, model } from 'mongoose'
 
-export type ProjectDocument = Project & Document
+export type ProjectDocument = Omit<Project, 'isDeleted'> & Document
 
 const projectSchema = new Schema(
   {

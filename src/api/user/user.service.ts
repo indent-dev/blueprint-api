@@ -12,7 +12,6 @@ export default class UserService {
     return userModel.findOne({ email })
   }
 
-  // create user
   createUser(user: UserRequest) {
     return new Promise<UserDocument>(async (resolve, reject) => {
       try {
@@ -32,7 +31,6 @@ export default class UserService {
     })
   }
 
-  // auth user
   authenticateUser(user: UserRequest) {
     return new Promise<string>(async (resolve, reject) => {
       try {

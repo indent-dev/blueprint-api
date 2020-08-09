@@ -26,22 +26,22 @@ describe('user', () => {
   it('can create user', async () => {
     const createUserResponse = await request
       .post('/user')
-      .send({ email: 'lulu@gmail.com', password: 'lulu' })
+      .send({ email: 'lala@gmail.com', password: 'lala' })
 
     expect(createUserResponse.body).to.deep.include({
-      email: 'lulu@gmail.com',
+      email: 'lala@gmail.com',
     })
     expect(createUserResponse.body).to.not.deep.include({
-      password: 'lulu',
+      password: 'lala',
     })
   })
 
   it('can authenticate user', async () => {
     const authenticateResponse = await request
       .post('/user/authenticate')
-      .send({ email: 'lili@gmail.com', password: 'lili' })
+      .send({ email: 'lulu@gmail.com', password: 'lulu' })
 
-    // expect(authenticateResponse.body).to.has.property('token')
+    expect(authenticateResponse.body).to.has.property('token')
   })
 
   it('can show error message if email or password wrong', async () => {

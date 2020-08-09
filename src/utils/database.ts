@@ -2,6 +2,8 @@ require('dotenv').config()
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import projectModel from '../api/project/project.model'
+import userModel from '../api/user/user.model'
+import userUtil from '../api/user/user.util'
 
 const mongoMemoryServer = new MongoMemoryServer()
 const { CONNECTION_STRING } = process.env
@@ -48,5 +50,10 @@ export async function mockingDatabaseRecord() {
   await projectModel.create({
     name: 'taman safari sector 6',
     description: 'kandang singa ini berada disebelah kandang harimau 2',
+  })
+  const hash = await userUtil.hash('lulu')
+  await userModel.create({
+    email: 'lulu@gmail.com',
+    password: hash,
   })
 }
