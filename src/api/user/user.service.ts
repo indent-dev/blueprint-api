@@ -37,15 +37,13 @@ export default class UserService {
         const userDocument = await userModel.findOne({
           email: user.email,
         })
-        if (!userDocument)
-          throw new HttpException(401, 'email or password wrong')
+        if (!userDocument) throw new HttpException(401, 'email wrong')
 
         const isPasswordMatch = await userUtil.compare(
           user.password,
           userDocument.password
         )
-        if (!isPasswordMatch)
-          throw new HttpException(401, 'email or password wrong')
+        if (!isPasswordMatch) throw new HttpException(401, 'password wrong')
 
         const token = jwt.sign(
           { email: user.email },
