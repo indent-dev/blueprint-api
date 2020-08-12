@@ -3,6 +3,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import errorHandler from './middlewares/errorHandler'
 import projectRouter from './api/project/project.router'
+import userRouter from './api/user/user.router'
 
 const app = express()
 
@@ -18,6 +19,7 @@ app.get('/', (req: Request, res: Response) => {
   })
 })
 
+app.use(userRouter)
 app.use(projectRouter)
 app.use(errorHandler)
 

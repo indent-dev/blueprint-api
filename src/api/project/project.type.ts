@@ -1,6 +1,7 @@
 export interface Project {
-  name: string;
-  description: string;
+  isDeleted: boolean
+  name: string
+  description: string
 }
 
-export type ProjectRequest = Omit<Project, "isDeleted">;
+export type ProjectRequest = Omit<Project, 'isDeleted'>
