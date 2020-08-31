@@ -1,0 +1,16 @@
+require('dotenv').config()
+const {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  GOOGLE_REDIRECT_PROD,
+  GOOGLE_REDIRECT_DEV,
+  GOOGLE_SCOPE_EMAIL,
+  GOOGLE_SCOPE_USER,
+} = process.env
+
+module.exports = {
+  client_id: GOOGLE_CLIENT_ID,
+  client_secret: GOOGLE_CLIENT_SECRET,
+  redirect_uris: [GOOGLE_REDIRECT_PROD, GOOGLE_REDIRECT_DEV],
+  scopes: [GOOGLE_SCOPE_USER, GOOGLE_SCOPE_EMAIL],
+}
