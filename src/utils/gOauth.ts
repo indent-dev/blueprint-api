@@ -1,15 +1,16 @@
 require('dotenv').config()
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env
+const {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  GOOGLE_REDIRECT_PROD,
+  GOOGLE_REDIRECT_DEV,
+  GOOGLE_SCOPE_EMAIL,
+  GOOGLE_SCOPE_USER,
+} = process.env
 
 module.exports = {
   client_id: GOOGLE_CLIENT_ID,
   client_secret: GOOGLE_CLIENT_SECRET,
-  redirect_uris: [
-    `https://api-blueprint-prod.herokuapp.com/user/auth_callback`,
-    `http://localhost:3000/user/auth_callback`,
-  ],
-  scopes: [
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/userinfo.profile',
-  ],
+  redirect_uris: [GOOGLE_REDIRECT_PROD, GOOGLE_REDIRECT_DEV],
+  scopes: [GOOGLE_SCOPE_USER, GOOGLE_SCOPE_EMAIL],
 }
