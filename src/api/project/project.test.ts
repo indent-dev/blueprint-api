@@ -115,12 +115,17 @@ describe('project', () => {
 
     const editProjectResponse = await request
       .put(`/project/${projectId}`)
-      .send({ name: 'bangau', description: 'kandang bangau' })
+      .send({
+        name: 'bangau',
+        description: 'kandang bangau',
+        slug: 'lorem ipsum 12345',
+      })
 
     expect(editProjectResponse.body).to.has.property('_id')
     expect(editProjectResponse.body).to.deep.include({
       name: 'bangau',
       description: 'kandang bangau',
+      slug: 'lorem-ipsum-12345',
     })
   })
 
@@ -168,6 +173,26 @@ describe('project', () => {
       isSuccess: 'false',
       statusCode: 409,
       message: 'Project name already exist',
+    })
+  })
+
+  it("can't update slug when already exist", async () => {
+    const getProjectResponse = await request
+      .get('/project/?page=1&itemPerPage=1&sortBy=name&sortDirection=asc')
+      .send()
+    const projectId = getProjectResponse.body[0]._id
+
+    const editSlugProjectResponse = await request
+      .put(`/project/${projectId}`)
+      .send({
+        slug: 'abcdef12345',
+      })
+
+    expect(editSlugProjectResponse.status).equal(400)
+    expect(editSlugProjectResponse.body).to.deep.include({
+      isSuccess: 'false',
+      statusCode: 400,
+      message: 'slug already exist',
     })
   })
 })

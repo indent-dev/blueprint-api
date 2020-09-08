@@ -46,10 +46,12 @@ export async function mockingDatabaseRecord() {
   await projectModel.create({
     name: 'werehouse peta kandang singa 1',
     description: 'kandang singa ini berada disebelah kandang harimau 1',
+    slug: 'abcdef12345',
   })
   await projectModel.create({
     name: 'taman safari sector 6',
     description: 'kandang singa ini berada disebelah kandang harimau 2',
+    slug: 'ghijkl67890',
   })
   const hash = await userUtil.hash('lulu')
   await userModel.create({

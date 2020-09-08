@@ -1,6 +1,7 @@
 import { ProjectRequest } from './project.type'
 import projectModel, { ProjectDocument } from './project.model'
 import HttpException from '../../utils/httpException'
+import cryptoRandomString from 'crypto-random-string'
 
 export default class ProjectService {
   /* Harusnya ini nanti
@@ -17,6 +18,10 @@ export default class ProjectService {
         const isProjectExist = await this.getProjectByName(project.name)
         if (isProjectExist)
           throw new HttpException(409, 'Project name already exist')
+
+        project = Object.assign(project, {
+          slug: `${cryptoRandomString({ length: 10, type: 'url-safe' })}`,
+        })
 
         resolve(projectModel.create({ ...project }))
       } catch (error) {
@@ -44,7 +49,7 @@ export default class ProjectService {
           .skip((page - 1) * itemPerPage)
           .sort({ [sortBy]: sortDirection })
         if (getProject) resolve(getProject)
-        else throw new HttpException(409, 'project not found')
+        else throw new HttpException(400, 'project not found')
       } catch (error) {
         reject(error)
       }
@@ -54,6 +59,11 @@ export default class ProjectService {
   editProject(id: string, project: ProjectRequest) {
     return new Promise<ProjectDocument>(async (resolve, reject) => {
       try {
+        if (typeof project.slug != 'undefined') {
+          const isSlugExist = await projectModel.findOne({ slug: project.slug })
+          if (isSlugExist) throw new HttpException(400, 'slug already exist')
+        }
+
         const editedProject = await projectModel.findByIdAndUpdate(
           id,
           project,

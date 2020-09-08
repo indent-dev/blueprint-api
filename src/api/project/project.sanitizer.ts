@@ -1,6 +1,7 @@
 import { body, query, param } from 'express-validator'
 import { Types } from 'mongoose'
 import validationHandler from '../../middlewares/validationHandler'
+import slugify from 'slugify'
 
 export default class ProjectSanitizer {
   sanitizeCreateProject() {
@@ -39,7 +40,11 @@ export default class ProjectSanitizer {
             throw new Error('id is not valid')
           }
         }),
-      body(['name', 'description'], 'must be given').notEmpty(),
+      body('slug', 'failed convert slug')
+        .optional()
+        .customSanitizer(value => {
+          return slugify(value)
+        }),
       validationHandler,
     ]
   }
